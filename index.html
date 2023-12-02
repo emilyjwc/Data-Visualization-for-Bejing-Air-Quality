@@ -1,66 +1,107 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
-  <script src="https://d3js.org/d3.v5.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>This is the web for Assignment#3</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.25.0/build/vega.min.js" integrity="sha256-na2uPt+tUPV7GRVpc+/ezQj+lGwljIvOJifkmg8f3as=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.15.0/build/vega-lite.min.js" integrity="sha256-WLAn82Ut4GptY/IJf4K/1i+R8ibAkVLFhBVkOovqCK8=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.22.2/build/vega-embed.min.js" integrity="sha256-GfFZ6w7V/y3Ws9eHVsOXZ/F1ZFroThVZraOAx3HAt6s=" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
 </head>
 
-<body>
-  <div>
-    <label for="pollutantSelect">Select Pollutant:</label>
-    <select id="pollutantSelect">
-      <option value="pm25">PM 2.5</option>
-      <option value="pm10">PM 10</option>
-      <option value="o3">Ozone (O3)</option>
-      <option value="no2">Nitrogen Dioxide (NO2)</option>
-      <option value="so2">Sulfur Dioxide (SO2)</option>
-      <option value="co">Carbon Monoxide (CO)</option>
-    </select>
-  </div>
-  <div id="vis"></div>
+<body style="text-align: center;">
+    <p>
+        <h1 style="font-size: x-large; text-align: center;">IS 455 Assignment#3</h1>
+        <h3 style="font-size: x-small; text-align: center;">Emily Chang (emilyjc4)</h3>
+        <!--problem on link doesn't go to the right place I want-->
+        <p style="font-size: small; text-align: center;">This is a visualization using the <em><a href="https://github.com/emilyjwc/emilyjwc.github.io/blob/main/building_inventory.csv">building inventory data</a></em>.</p><br />
+        <h2 style="font-size: 15px; text-align: center;">Below are four charts demonstrating the relationships between different columns.</h2>
+        <p style="font-size: 13px; text-align:center">
+            First chart: <strong>Bar Chart</strong> showing the relationship between <em style="color: blue;">Agency Name</em> and <em style="color: orange;"> Count of Records</em>.<br />
+            Second chart: <strong>Scatter Chart</strong> showing the relationship between <em style="color: pink;">Year Consturcted</em> and <em style="color: green;">Year Acquired</em>.<br />
+            Third chart: <strong>Stacked Bar Chart</strong> showing the relationship between <em style="color: red;">Bldg Status</em> and <em style="color: blueviolet;">Count</em>.<br />
+            Fourth chart: <strong>Line Chart</strong> showing the relationship between <em style="color: green;">Year Acquired</em> and <em style="color:gray;">Total Floors</em>.<br />
+            <h2 style="font-size: 20px;">Instrucitons</h2><br />
+            <p style="font-size: 13px;">
+                1. By hovering on the first chart, you will be able to see count of records of each agency.<br />
+                2. By framing specific areas on the first chart, the second and third charts show the data from the colors selected.<br />
+                3. By framing on the second chart, the first chart shows the agency amount selected in colors and the unselected parts turn gray.<br />
+                4. By hovering on the third chart, it shows the building status, agency name and the count of the area.<br />
+                5. By hovering on the fourth chart, it shows the year acquired, total floors and agency name of specific points on the line.<br />
+                6. By framing on the fourth chart, you will be able to see how different types of status show on the first and second chart.<br />
+            </p>
 
-  <script>
-    // Define the Vega-Lite specification
-    const vegaLiteSpec = {
-      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "data": {
-        "url": "https://raw.githubusercontent.com/emilyjwc/is445_group2/main/beijing-air-quality-new.csv",
-        "format": {
-          "type": "csv",
-          "parse": {
-            "date": "date",
-            "pm25": "number",
-            "pm10": "number",
-            "o3": "number",
-            "no2": "number",
-            "so2": "number",
-            "co": "number"
-          }
-        }
-      },
-      "mark": "line",
-      "encoding": {
-        "x": {"field": "date", "type": "temporal"},
-        "y": {"field": "pm25", "type": "quantitative"}
-      }
-    };
+        </p>
+        <div>
+            <label for="pollutantSelect">Select Pollutant:</label>
+            <select id="pollutantSelect">
+                <option value="pm25">PM 2.5</option>
+                <option value="pm10">PM 10</option>
+                <option value="o3">Ozone (O3)</option>
+                <option value="no2">Nitrogen Dioxide (NO2)</option>
+                <option value="so2">Sulfur Dioxide (SO2)</option>
+                <option value="co">Carbon Monoxide (CO)</option>
+            </select>
+        </div>
+        <div id="vis"></div>
 
-    // Embed the visualization in the div with id 'vis'
-    const embedOpt = {"mode": "vega-lite"};
-    const el = document.getElementById('vis');
-    vegaEmbed(el, vegaLiteSpec, embedOpt);
+        <script>
+            // Define the Vega-Lite specification
+            const vegaLiteSpec = {
+                "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                "data": {
+                    "url": "https://raw.githubusercontent.com/emilyjwc/is445_group2/main/beijing-air-quality-new.csv",
+                    "format": {
+                        "type": "csv",
+                        "parse": {
+                            "date": "date",
+                            "pm25": "number",
+                            "pm10": "number",
+                            "o3": "number",
+                            "no2": "number",
+                            "so2": "number",
+                            "co": "number"
+                        }
+                    }
+                },
+                "mark": "line",
+                "encoding": {
+                    "x": { "field": "date", "type": "temporal" },
+                    "y": { "field": "pm25", "type": "quantitative" }
+                }
+            };
 
-    // Handle dropdown selection change
-    const select = document.getElementById('pollutantSelect');
-    select.addEventListener('change', (event) => {
-      const selectedPollutant = event.target.value;
-      vegaLiteSpec.encoding.y.field = selectedPollutant;
-      vegaEmbed(el, vegaLiteSpec, embedOpt);
-    });
-  </script>
-</body>
+            // Embed the visualization in the div with id 'vis'
+            const embedOpt = { "mode": "vega-lite" };
+            const el = document.getElementById('vis');
+            vegaEmbed(el, vegaLiteSpec, embedOpt);
 
-</html>
+            // Handle dropdown selection change
+            const select = document.getElementById('pollutantSelect');
+            select.addEventListener('change', (event) => {
+                const selectedPollutant = event.target.value;
+                vegaLiteSpec.encoding.y.field = selectedPollutant;
+                vegaEmbed(el, vegaLiteSpec, embedOpt);
+            });
+        </script>
+
+        <div id="viz"></div>
+
+        <script>
+            var vlSpec = {
+                "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                "data": {
+                    "url": "https://raw.githubusercontent.com/emilyjwc/emilyjwc.github.io/main/building_inventory.csv"
+                },
+                "vconcat": [
+                    {
+                        "layer": [
+                            {
+                                "mark": { "type": "bar" },
+                                "selection": {
+                                    "brush1": { "type": "interval", "encodings": ["x"] }
+                                },
+                                "encoding": {
+                                    "x": { "field": "
