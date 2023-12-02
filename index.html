@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+
+<body>
+  <div>
+    <label for="pollutantSelect">Select Pollutant:</label>
+    <select id="pollutantSelect">
+      <option value="pm25">PM 2.5</option>
+      <option value="pm10">PM 10</option>
+      <option value="o3">Ozone (O3)</option>
+      <option value="no2">Nitrogen Dioxide (NO2)</option>
+      <option value="so2">Sulfur Dioxide (SO2)</option>
+      <option value="co">Carbon Monoxide (CO)</option>
+    </select>
+  </div>
+  <div id="vis"></div>
+
+  <script>
+    // Define the Vega-Lite specification
+    const vegaLiteSpec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "url": "https://raw.githubusercontent.com/emilyjwc/is445_group2/main/beijing-air-quality-new.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "date": "date",
+            "pm25": "number",
+            "pm10": "number",
+            "o3": "number",
+            "no2": "number",
+            "so2": "number",
+            "co": "number"
+          }
+        }
+      },
+      "mark": "line",
+      "encoding": {
+        "x": {"field": "date", "type": "temporal"},
+        "y": {"field": "pm25", "type": "quantitative"}
+      }
+    };
+
+    // Embed the visualization in the div with id 'vis'
+    const embedOpt = {"mode": "vega-lite"};
+    const el = document.getElementById('vis');
+    vegaEmbed(el, vegaLiteSpec, embedOpt);
+
+    // Handle dropdown selection change
+    const select = document.getElementById('pollutantSelect');
+    select.addEventListener('change', (event) => {
+      const selectedPollutant = event.target.value;
+      vegaLiteSpec.encoding.y.field = selectedPollutant;
+      vegaEmbed(el, vegaLiteSpec, embedOpt);
+    });
+  </script>
+</body>
+
+</html>
