@@ -86,5 +86,44 @@
                 vegaEmbed(el, vegaLiteSpec, embedOpt);
             });
         </script>
+        <script>
+            // Import necessary libraries for plotting
+            const matplotlib = require('matplotlib');
+            const sns = require('seaborn');
+        
+            // Assuming 'columns' and 'df' are defined in your context
+            const columns = [...]; // List of columns to plot
+            const df = {...}; // Your DataFrame or data structure
+        
+            // Boxplot for outliers
+            const plotBoxplot = () => {
+                matplotlib.pyplot.figure(figsize=[13, 10]);
+                sns.set(style="whitegrid");
+        
+                columns.forEach((column, i) => {
+                    matplotlib.pyplot.subplot(2, 3, i + 1);
+                    sns.boxplot({ y: df[column], orient: 'v', color: 'skyblue' });
+        
+                    // Assuming 'detect_outliers' function is defined
+                    const outliers = detect_outliers(column);
+                    const num_outliers = outliers.length;
+        
+                    matplotlib.pyplot.text(0.5, 0.85, `Outliers: ${num_outliers}`, {
+                        transform: matplotlib.pyplot.gca().transAxes,
+                        bbox: { facecolor: 'white', alpha: 0.5 }
+                    });
+        
+                    matplotlib.pyplot.title(column);
+                });
+        
+                matplotlib.pyplot.subplots_adjust(wspace=0.3, hspace=0.3);
+                matplotlib.pyplot.tight_layout();
+                matplotlib.pyplot.show();
+            };
+        
+            // Call the boxplot function
+            plotBoxplot();
+        </script>
+        
 
         <div id="viz"></div>
