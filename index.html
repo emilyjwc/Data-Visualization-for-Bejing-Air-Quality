@@ -4,89 +4,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>This is the web for Assignment#3</title>
+    <title>Assignment #3 - Beijing Air Quality</title>
+    <!-- Include necessary JavaScript libraries -->
     <script src="https://cdn.jsdelivr.net/npm/vega@5.25.0/build/vega.min.js" integrity="sha256-na2uPt+tUPV7GRVpc+/ezQj+lGwljIvOJifkmg8f3as=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.15.0/build/vega-lite.min.js" integrity="sha256-WLAn82Ut4GptY/IJf4K/1i+R8ibAkVLFhBVkOovqCK8=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.22.2/build/vega-embed.min.js" integrity="sha256-GfFZ6w7V/y3Ws9eHVsOXZ/F1ZFroThVZraOAx3HAt6s=" crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
 </head>
 
-<body style="text-align: center;">
-    <p>
-        <h1 style="font-size: x-large; text-align: center;">IS 455 Assignment#3</h1>
-        <h3 style="font-size: x-small; text-align: center;">Emily Chang (emilyjc4)</h3>
-        <!--problem on link doesn't go to the right place I want-->
-        <p style="font-size: small; text-align: center;">This is a visualization using the <em><a href="https://github.com/emilyjwc/is445_group2/blob/main/beijing-air-quality-new.csv">Beijing Air Quality data</a></em>.</p><br />
-        <h2 style="font-size: 15px; text-align: center;">Below are four charts demonstrating the relationships between different columns.</h2>
-        <p style="font-size: 13px; text-align:center">
-            First chart: <strong>Bar Chart</strong> showing the relationship between <em style="color: blue;">Agency Name</em> and <em style="color: orange;"> Count of Records</em>.<br />
-            Second chart: <strong>Scatter Chart</strong> showing the relationship between <em style="color: pink;">Year Consturcted</em> and <em style="color: green;">Year Acquired</em>.<br />
-            Third chart: <strong>Stacked Bar Chart</strong> showing the relationship between <em style="color: red;">Bldg Status</em> and <em style="color: blueviolet;">Count</em>.<br />
-            Fourth chart: <strong>Line Chart</strong> showing the relationship between <em style="color: green;">Year Acquired</em> and <em style="color:gray;">Total Floors</em>.<br />
-            <h2 style="font-size: 20px;">Instrucitons</h2><br />
-            <p style="font-size: 13px;">
-                1. By hovering on the first chart, you will be able to see count of records of each agency.<br />
-                2. By framing specific areas on the first chart, the second and third charts show the data from the colors selected.<br />
-                3. By framing on the second chart, the first chart shows the agency amount selected in colors and the unselected parts turn gray.<br />
-                4. By hovering on the third chart, it shows the building status, agency name and the count of the area.<br />
-                5. By hovering on the fourth chart, it shows the year acquired, total floors and agency name of specific points on the line.<br />
-                6. By framing on the fourth chart, you will be able to see how different types of status show on the first and second chart.<br />
-            </p>
+<body>
+    <h1>Assignment #3 - Beijing Air Quality</h1>
 
-        </p>
-        <div>
-            <label for="pollutantSelect">Select Pollutant:</label>
-            <select id="pollutantSelect">
-                <option value="pm25">PM 2.5</option>
-                <option value="pm10">PM 10</option>
-                <option value="o3">Ozone (O3)</option>
-                <option value="no2">Nitrogen Dioxide (NO2)</option>
-                <option value="so2">Sulfur Dioxide (SO2)</option>
-                <option value="co">Carbon Monoxide (CO)</option>
-            </select>
-        </div>
-        <div id="vis"></div>
+    <!-- Dropdown for selecting pollutant -->
+    <label for="pollutantSelect">Select Pollutant:</label>
+    <select id="pollutantSelect">
+        <option value="pm25">PM 2.5</option>
+        <option value="pm10">PM 10</option>
+        <option value="o3">Ozone (O3)</option>
+        <option value="no2">Nitrogen Dioxide (NO2)</option>
+        <option value="so2">Sulfur Dioxide (SO2)</option>
+        <option value="co">Carbon Monoxide (CO)</option>
+    </select>
 
-        <script>
-            // Define the Vega-Lite specification
+    <!-- Container for visualization -->
+    <div id="vis"></div>
+
+    <script>
+        // Fetch data from the API
+        async function fetchData(apiUrl) {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            return data;
+        }
+
+        // Update and display the chart
+        async function updateChart(apiUrl) {
+            const data = await fetchData(apiUrl);
+
+            // Extract relevant data
+            const timeSeries = data.data.time.s.map(date => new Date(date));
+            const pollutants = data.data.iaqi;
+            const timeZone = data.data.time.tz;
+
+            // Select pollutants
+            const selectedPollutant = document.getElementById('pollutantSelect').value;
+            const values = pollutants[selectedPollutant].v;
+
+            // Create a Vega-Lite specification
             const vegaLiteSpec = {
                 "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
                 "data": {
-                    "url": "https://raw.githubusercontent.com/emilyjwc/is445_group2/main/beijing-air-quality-new.csv",
-                    "format": {
-                        "type": "csv",
-                        "parse": {
-                            "date": "date",
-                            "pm25": "number",
-                            "pm10": "number",
-                            "o3": "number",
-                            "no2": "number",
-                            "so2": "number",
-                            "co": "number"
-                        }
-                    }
+                    "values": timeSeries.map((date, index) => ({ date, value: values[index] })),
                 },
                 "mark": "line",
                 "encoding": {
                     "x": { "field": "date", "type": "temporal" },
-                    "y": { "field": "pm25", "type": "quantitative" }
-                }
+                    "y": { "field": "value", "type": "quantitative" },
+                },
             };
 
             // Embed the visualization in the div with id 'vis'
-            const embedOpt = { "mode": "vega-lite" };
-            const el = document.getElementById('vis');
-            vegaEmbed(el, vegaLiteSpec, embedOpt);
+            vegaEmbed('vis', vegaLiteSpec);
+        }
 
-            // Handle dropdown selection change
-            const select = document.getElementById('pollutantSelect');
-            select.addEventListener('change', (event) => {
-                const selectedPollutant = event.target.value;
-                vegaLiteSpec.encoding.y.field = selectedPollutant;
-                vegaEmbed(el, vegaLiteSpec, embedOpt);
-            });
-        </script>
+        // Handle dropdown selection change
+        const select = document.getElementById('pollutantSelect');
+        select.addEventListener('change', () => {
+            const apiUrl = "https://api.waqi.info/feed/beijing/?token=f4edd4abb0847e9970cbb651a257aeef2abf68ef";
+            updateChart(apiUrl);
+        });
 
-        <div id="viz"></div>
+        // Initial chart display
+        const initialApiUrl = "https://api.waqi.info/feed/beijing/?token=f4edd4abb0847e9970cbb651a257aeef2abf68ef";
+        updateChart(initialApiUrl);
+    </script>
+</body>
 
-
+</html>
