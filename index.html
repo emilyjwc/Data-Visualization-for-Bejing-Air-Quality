@@ -362,3 +362,92 @@
             });
         </script>
 
+        <div>
+            <label for="pollutantSelect">Select Pollutant:</label>
+            <select id="pollutantSelect">
+                <option value="pm25">PM 2.5</option>
+                <option value="pm10">PM 10</option>
+                <option value="o3">Ozone (O3)</option>
+                <option value="no2">Nitrogen Dioxide (NO2)</option>
+                <option value="so2">Sulfur Dioxide (SO2)</option>
+                <option value="co">Carbon Monoxide (CO)</option>
+            </select>
+        </div>
+
+        <canvas id="plotCanvas" width="800" height="400"></canvas>
+
+        <script>
+            // Sample data
+            const x = [...]; // Provide your x-axis data
+            const averageByYear = {
+                'pm25': [...], // Provide your corresponding y-axis data for pm25
+                'pm10': [...], // Provide your corresponding y-axis data for pm10
+                'o3': [...],   // Provide your corresponding y-axis data for o3
+                'no2': [...],  // Provide your corresponding y-axis data for no2
+                'so2': [...],  // Provide your corresponding y-axis data for so2
+                'co': [...],   // Provide your corresponding y-axis data for co
+            };
+
+            const defaultColors = {
+                'pm25': 'blue',
+                'pm10': 'green',
+                'o3': 'red',
+                'no2': 'purple',
+                'so2': 'orange',
+                'co': 'gray',
+            };
+
+            // Create a dropdown element
+            const dropdown = document.getElementById('pollutantSelect');
+
+            // Create a chart element
+            const chartCanvas = document.getElementById('plotCanvas');
+            const ctx = chartCanvas.getContext('2d');
+
+            // Initial plot
+            updatePlot('pm25');
+
+            // Function to update the plot
+            function updatePlot(selectedPollutant) {
+                const data = {
+                    labels: x,
+                    datasets: [{
+                        label: selectedPollutant,
+                        data: averageByYear[selectedPollutant],
+                        borderColor: defaultColors[selectedPollutant],
+                        fill: false,
+                        pointRadius: 5,
+                    }]
+                };
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: data,
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'linear', // Assuming x-axis is linear
+                                position: 'bottom',
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: `${selectedPollutant} Level`,
+                                },
+                            },
+                        },
+                        title: {
+                            display: true,
+                            text: `Time Trend of ${selectedPollutant} by Year`,
+                        },
+                    },
+                });
+            }
+
+            // Event listener for dropdown change
+            dropdown.addEventListener('change', (event) => {
+                const selectedPollutant = event.target.value;
+                updatePlot(selectedPollutant);
+            });
+        </script>
+
