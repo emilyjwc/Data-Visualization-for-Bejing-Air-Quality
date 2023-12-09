@@ -197,4 +197,31 @@
         </script>
         
 
-        <div id="viz"></div>
+        <div id="aqiWidget" style="background-color: #ffde33; padding: 10px; border-radius: 5px;"></div>
+        <script>
+            function displayAqiWidget(cityname, aqi, date, impact, attribution, details) {
+                var widgetElement = document.getElementById('aqiWidget');
+                var htmlCode = `
+                    <strong>${cityname} Air Quality</strong> is <span style='font-weight: bold;'>${impact}</span>.
+                    <br>
+                    AQI: ${aqi} on ${date}
+                    <br>
+                    Provided by ${attribution}
+                    <br>
+                    Details: ${details}
+                `;
+                widgetElement.innerHTML = htmlCode;
+            }
+
+            // Example data
+            var cityname = "Beijing";
+            var aqi = 38;
+            var date = "Sunday 7:00";
+            var impact = "Good";
+            var attribution = "Beijing Environmental Protection Monitoring Center";
+            var details = "Beijing Air Quality.\n38\nGood\nUpdated on Sunday 7:00";
+
+            // Display the widget
+            displayAqiWidget(cityname, aqi, date, impact, attribution, details);
+        </script>
+
