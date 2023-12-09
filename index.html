@@ -297,3 +297,68 @@
                 return color;
             }
         </script>
+
+        <canvas id="pollutantChart" width="800" height="400"></canvas>
+        <script>
+            // Assuming 'df' is defined in your context
+            const startDate = new Date('2023-01-01');
+            const endDate = new Date('2023-12-31');
+
+            // Filter data based on the date range
+            const filteredData = df.filter(row => {
+                const currentDate = new Date(row.date);
+                return currentDate >= startDate && currentDate <= endDate;
+            });
+
+            // Extract relevant data for plotting
+            const dates = filteredData.map(row => new Date(row.date));
+            const pm25Values = filteredData.map(row => row.pm25);
+            const pm10Values = filteredData.map(row => row.pm10);
+
+            // Create a line chart
+            const ctx = document.getElementById('pollutantChart').getContext('2d');
+            const pollutantChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'PM2.5',
+                            data: pm25Values,
+                            borderColor: 'blue',
+                            fill: false
+                        },
+                        {
+                            label: 'PM10',
+                            data: pm10Values,
+                            borderColor: 'green',
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                displayFormats: {
+                                    day: 'MMM D'
+                                }
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Pollution Level'
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'PM2.5 and PM10 Trends Over Time (2023-2024)'
+                    }
+                }
+            });
+        </script>
+
