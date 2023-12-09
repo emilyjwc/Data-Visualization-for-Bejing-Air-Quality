@@ -47,8 +47,9 @@
                 <option value="co">Carbon Monoxide (CO)</option>
             </select>
         </div>
-        <div id="vis"></div>
 
+
+        <div id="vis"></div>
         <script>
             // Define the Vega-Lite specification
             const vegaLiteSpec = {
@@ -88,10 +89,10 @@
                 vegaEmbed(el, vegaLiteSpec, embedOpt);
             });
         </script>
+
+
         <div id="chartContainer"></div>
         <button onclick="plotChart()">Refresh Data</button>
-    
-
         <script>
             const beijingApiUrl = "https://api.waqi.info/feed/beijing/?token=f4edd4abb0847e9970cbb651a257aeef2abf68ef";
 
@@ -167,15 +168,15 @@
             }
         </script>
 
-        <div id="map" style="height: 500px;"></div>
 
+        <div id="map" style="height: 500px;"></div>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
             // Define the API URL
-            var beijingApiUrl = "https://api.waqi.info/feed/beijing/?token=f4edd4abb0847e9970cbb651a257aeef2abf68ef";
+            var beijingApiUrl1 = "https://api.waqi.info/feed/beijing/?token=f4edd4abb0847e9970cbb651a257aeef2abf68ef";
 
             // Fetch data from the API
-            fetch(beijingApiUrl)
+            fetch(beijingApiUrl1)
                 .then(response => response.json())
                 .then(data => {
                     // Extract relevant information
