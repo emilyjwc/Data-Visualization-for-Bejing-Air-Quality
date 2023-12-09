@@ -371,7 +371,7 @@
             data.sort((a, b) => new Date(a.date) - new Date(b.date));
 
             // Extract date and pollutants' data
-            const dates = data.map(entry => entry.date);
+            const date = data.map(entry => entry.date);
             const pollutants = ['pm25', 'pm10', 'o3', 'no2', 'so2', 'co'];
 
             // Create datasets for each pollutant
