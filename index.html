@@ -228,7 +228,6 @@
 
 
         <canvas id="pollutantChart" width="800" height="400"></canvas>
-
         <script>
             // Load CSV data and create the chart
             Papa.parse("https://raw.githubusercontent.com/emilyjwc/is445_group2/main/beijing-air-quality-new.csv", {
@@ -236,6 +235,11 @@
                 header: true,
                 dynamicTyping: true,
                 complete: function (result) {
+                    if (result.errors.length > 0) {
+                        console.error("Error parsing CSV:", result.errors);
+                        return;
+                    }
+
                     var df = result.data;
 
                     // Create datasets for each pollutant
