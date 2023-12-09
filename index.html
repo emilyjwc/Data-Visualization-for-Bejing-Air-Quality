@@ -226,69 +226,69 @@
         </script>
 
 
-    <canvas id="pollutantChart" width="800" height="400"></canvas>
+        <canvas id="pollutantChart" width="800" height="400"></canvas>
 
-    <script>
-        // Example data
-        var dates = ["2023-01-01", "2023-01-02", "2023-01-03"];
-        var pollutantsData = {
-            "pm25": [10, 15, 12],
-            "pm10": [8, 14, 10],
-            "o3": [30, 35, 28],
-            "no2": [20, 25, 22],
-            "so2": [5, 8, 6],
-            "co": [1, 1.5, 1.2]
-        };
+        <script>
+            // Load CSV data and create the chart
+            Papa.parse("https://github.com/emilyjwc/is445_group2/blob/main/beijing-air-quality-new.csv", {
+                download: true,
+                header: true,
+                dynamicTyping: true,
+                complete: function (result) {
+                    var df = result.data;
 
-        // Create datasets for each pollutant
-        var datasets = Object.keys(pollutantsData).map(function (pollutant) {
-            return {
-                label: pollutant,
-                data: pollutantsData[pollutant],
-                borderColor: getRandomColor(),
-                fill: false
-            };
-        });
+                    // Create datasets for each pollutant
+                    var datasets = ['pm25', 'pm10', 'o3', 'no2', 'so2', 'co'].map(function (pollutant) {
+                        return {
+                            label: pollutant,
+                            data: df.map(function (row) {
+                                return { x: new Date(row.date), y: row[pollutant] };
+                            }),
+                            borderColor: getRandomColor(),
+                            fill: false
+                        };
+                    });
 
-        // Create a line chart
-        var ctx = document.getElementById('pollutantChart').getContext('2d');
-        var pollutantChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: dates,
-                datasets: datasets
-            },
-            options: {
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'day',
-                            displayFormats: {
-                                day: 'MMM D'
+                    // Create a line chart
+                    var ctx = document.getElementById('pollutantChart').getContext('2d');
+                    var pollutantChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            datasets: datasets
+                        },
+                        options: {
+                            scales: {
+                                x: {
+                                    type: 'time',
+                                    time: {
+                                        unit: 'day',
+                                        displayFormats: {
+                                            day: 'MMM D'
+                                        }
+                                    }
+                                },
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: 'Pollution Level'
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Time Series Trends of Air Quality Parameters'
                             }
                         }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Pollution Level'
-                        }
-                    }
-                },
-                title: {
-                    display: true,
-                    text: 'Time Series Trends of Air Quality Parameters'
+                    });
                 }
-            }
-        });
+            });
 
-        function getRandomColor() {
-            var letters = '0123456789ABCDEF';
-            var color = '#';
-            for (var i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
+            function getRandomColor() {
+                var letters = '0123456789ABCDEF';
+                var color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
             }
-            return color;
-        }
-    </script>
+        </script>
