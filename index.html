@@ -56,20 +56,36 @@
             const vegaLiteSpec = {
                 "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
                 "data": {
-                    "values": {{ average_by_year.to_json(orient='records') | safe }},
+                    "url": "https://raw.githubusercontent.com/emilyjwc/is445_group2/main/beijing-air-quality-new.csv",
+                    "format": {
+                        "type": "csv",
+                        "parse": {
+                            "date": "date",
+                            "pm25": "number",
+                            "pm10": "number",
+                            "o3": "number",
+                            "no2": "number",
+                            "so2": "number",
+                            "co": "number"
+                        }
+                    }
                 },
                 "mark": "line",
                 "encoding": {
-                    "x": { "field": "year", "type": "temporal" },
-                    "y": { "field": "pm25", "type": "quantitative" }
+                    "x": {"field": "date", "type": "temporal"},
+                    "y": {
+                        "aggregate": "average", // Use 'average' as the aggregate function
+                        "field": "pm25", // Initial value, will be changed dynamically
+                        "type": "quantitative"
+                    }
                 }
             };
-    
+        
             // Embed the visualization in the div with id 'vis'
-            const embedOpt = { "mode": "vega-lite" };
+            const embedOpt = {"mode": "vega-lite"};
             const el = document.getElementById('vis');
             vegaEmbed(el, vegaLiteSpec, embedOpt);
-    
+        
             // Handle dropdown selection change
             const select = document.getElementById('pollutantSelect');
             select.addEventListener('change', (event) => {
@@ -78,6 +94,7 @@
                 vegaEmbed(el, vegaLiteSpec, embedOpt);
             });
         </script>
+        
 
 
         <div id="chartContainer"></div>
