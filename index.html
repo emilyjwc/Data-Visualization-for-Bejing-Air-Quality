@@ -37,7 +37,7 @@
             </p>
 
         </p>
-        <h2 style="font-size: 20px;">Time trend of Pollutant Selected by year</h2><br />
+        <p><h2 style="font-size: 20px;">Time trend of Pollutant Selected by year</h2><br /></p>
         <div>
             <label for="pollutantSelect">Select Pollutant:</label>
             <select id="pollutantSelect">
@@ -92,7 +92,7 @@
             });
         </script>
 
-        <h2 style="font-size: 20px;">Pollutant Levels (Press the refresh button for real-time data)</h2><br />
+        <p><h2 style="font-size: 20px;">Pollutant Levels (Press the refresh button for real-time data)</h2><br /></p>
         <div id="chartContainer"></div>
         <button onclick="plotChart()">Refresh Data</button>
         <script>
@@ -170,7 +170,7 @@
             }
         </script>
 
-        <h2 style="font-size: 20px;">Map API</h2><br />
+        <p><h2 style="font-size: 20px;">Map API</h2><br /></p>
         <div id="map" style="height: 500px;"></div>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
@@ -198,7 +198,7 @@
                 .catch(error => console.error('Error fetching data:', error));
         </script>
         
-        <h2 style="font-size: 20px;">Widget API</h2><br />
+        <p><h2 style="font-size: 20px;">Widget API</h2><br /></p>
         <div id="aqiWidget" style="background-color: #ffde33; padding: 10px; border-radius: 5px;"></div>
         <script>
             function displayAqiWidget(cityname, aqi, date, impact, attribution, details) {
