@@ -38,7 +38,7 @@
 
         </p>
         <div>
-            <label for="pollutantSelect">Select Pollution:</label>
+            <label for="pollutantSelect">Select Pollutant:</label>
             <select id="pollutantSelect">
                 <option value="pm25">PM 2.5</option>
                 <option value="pm10">PM 10</option>
@@ -48,31 +48,19 @@
                 <option value="co">Carbon Monoxide (CO)</option>
             </select>
         </div>
-    
+
+
         <div id="vis"></div>
-    
         <script>
             // Define the Vega-Lite specification
             const vegaLiteSpec = {
                 "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
                 "data": {
-                    "url": "https://raw.githubusercontent.com/emilyjwc/is445_group2/main/beijing-air-quality-new.csv",
-                    "format": {
-                        "type": "csv",
-                        "parse": {
-                            "date": "date",
-                            "pm25": "number",
-                            "pm10": "number",
-                            "o3": "number",
-                            "no2": "number",
-                            "so2": "number",
-                            "co": "number"
-                        }
-                    }
+                    "values": {{ average_by_year.to_json(orient='records') | safe }},
                 },
                 "mark": "line",
                 "encoding": {
-                    "x": { "field": "date", "type": "temporal" },
+                    "x": { "field": "year", "type": "temporal" },
                     "y": { "field": "pm25", "type": "quantitative" }
                 }
             };
@@ -90,6 +78,7 @@
                 vegaEmbed(el, vegaLiteSpec, embedOpt);
             });
         </script>
+
 
         <div id="chartContainer"></div>
         <button onclick="plotChart()">Refresh Data</button>
