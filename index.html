@@ -309,6 +309,26 @@
         <!-- Add this button at the end of your HTML body -->
         <button onclick="topFunction()" id="myBtn" title="Go to top">Back to Top</button>
 
+        <style>
+        #myBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #007BFF; /* Set the background color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #myBtn:hover {
+            background-color: #0056b3; /* Change the background color on hover */
+        }
+        </style>
+
         <script>
         // Add this script in the head or at the end of your body
         // When the user scrolls down 20px from the top of the document, show the button
@@ -328,6 +348,7 @@
             document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
         }
         </script>
+
         </body>
 
 
