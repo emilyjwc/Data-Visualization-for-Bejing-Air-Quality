@@ -229,75 +229,9 @@
             displayAqiWidget(cityname, aqi, date, impact, attribution, details);
         </script>
 
-
-        <canvas id="pollutantsTrendsChart" width="800" height="400"></canvas>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            // Replace 'your_api_url_here' with the actual API endpoint
-            const apiUrl = 'your_api_url_here';
-
-            // Fetch data from the API
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    // Extract relevant data
-                    const dates = data.map(entry => entry.date);
-                    const pollutants = ['pm25', 'pm10', 'o3', 'no2', 'so2', 'co'];
-
-                    // Create datasets for each pollutant
-                    const datasets = pollutants.map(pollutant => {
-                        return {
-                            label: pollutant,
-                            data: data.map(entry => entry[pollutant]),
-                            borderColor: getRandomColor(),
-                            fill: false
-                        };
-                    });
-
-                    // Create a line chart
-                    const ctx = document.getElementById('pollutantsTrendsChart').getContext('2d');
-                    const pollutantsTrendsChart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: dates,
-                            datasets: datasets
-                        },
-                        options: {
-                            scales: {
-                                x: {
-                                    type: 'time',
-                                    time: {
-                                        unit: 'day',
-                                        displayFormats: {
-                                            day: 'MMM D'
-                                        }
-                                    }
-                                },
-                                y: {
-                                    title: {
-                                        display: true,
-                                        text: 'Pollution Level'
-                                    }
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: 'Time Series Trends of Air Quality Parameters'
-                            }
-                        }
-                    });
-
-                    function getRandomColor() {
-                        var letters = '0123456789ABCDEF';
-                        var color = '#';
-                        for (var i = 0; i < 6; i++) {
-                            color += letters[Math.floor(Math.random() * 16)];
-                        }
-                        return color;
-                    }
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        </script>
-
+        <h2 style="font-size: 20px;">Air Quality Trend</h2>
+        <div id="vis">
+            <img src="emilyjwc/is445_group2/images/AQ_trend.png" alt="AQ_trend">
+        </div>
 
         
