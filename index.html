@@ -15,8 +15,7 @@
 </head>
 
 <body style="text-align: center;">
-    <p>
-        <h1 style="font-size: x-large; text-align: center;">IS 455 Final Project (Group 2)</h1>
+    <h1 style="font-size: x-large; text-align: center;">IS 455 Final Project (Group 2)</h1>
         <h3 style="font-size: x-small; text-align: center;">Emily Chang (emilyjc4)</h3>
         <!--problem on link doesn't go to the right place I want-->
         <p style="font-size: small; text-align: center;">This is a visualization using the <em><a href="https://github.com/emilyjwc/is445_group2/blob/main/beijing-air-quality-new.csv">Beijing Air Quality data</a></em>.</p><br />
@@ -26,77 +25,36 @@
             Second chart: <strong>Scatter Chart</strong> showing the relationship between <em style="color: pink;">Year Consturcted</em> and <em style="color: green;">Year Acquired</em>.<br />
             Third chart: <strong>Stacked Bar Chart</strong> showing the relationship between <em style="color: red;">Bldg Status</em> and <em style="color: blueviolet;">Count</em>.<br />
             Fourth chart: <strong>Line Chart</strong> showing the relationship between <em style="color: green;">Year Acquired</em> and <em style="color:gray;">Total Floors</em>.<br />
-            <h2 style="font-size: 20px;">Instrucitons</h2><br />
-            <p style="font-size: 13px;">
-                1. By hovering on the first chart, you will be able to see count of records of each agency.<br />
-                2. By framing specific areas on the first chart, the second and third charts show the data from the colors selected.<br />
-                3. By framing on the second chart, the first chart shows the agency amount selected in colors and the unselected parts turn gray.<br />
-                4. By hovering on the third chart, it shows the building status, agency name and the count of the area.<br />
-                5. By hovering on the fourth chart, it shows the year acquired, total floors and agency name of specific points on the line.<br />
-                6. By framing on the fourth chart, you will be able to see how different types of status show on the first and second chart.<br />
-            </p>
+    <h2 style="font-size: 20px;">Instructions</h2><br />
+    <p style="font-size: 13px;">
+        1. By hovering on the first chart, you will be able to see count of records of each agency.<br />
+        2. By framing specific areas on the first chart, the second and third charts show the data from the colors selected.<br />
+        3. By framing on the second chart, the first chart shows the agency amount selected in colors and the unselected parts turn gray.<br />
+        4. By hovering on the third chart, it shows the building status, agency name and the count of the area.<br />
+        5. By hovering on the fourth chart, it shows the year acquired, total floors and agency name of specific points on the line.<br />
+        6. By framing on the fourth chart, you will be able to see how different types of status show on the first and second chart.<br />
+    </p>
 
-        </p>
-        <p><h2 style="font-size: 20px;">Time trend of Pollutant Selected by year</h2><br /></p>
-        <div>
-            <label for="pollutantSelect">Select Pollutant:</label>
-            <select id="pollutantSelect">
-                <option value="pm25">PM 2.5</option>
-                <option value="pm10">PM 10</option>
-                <option value="o3">Ozone (O3)</option>
-                <option value="no2">Nitrogen Dioxide (NO2)</option>
-                <option value="so2">Sulfur Dioxide (SO2)</option>
-                <option value="co">Carbon Monoxide (CO)</option>
-            </select>
-        </div>
+    <!-- ... (unchanged) ... -->
 
+    <h2 style="font-size: 20px;">Time trend of Pollutant Selected by year</h2><br />
+    <div>
+        <label for="pollutantSelect">Select Pollutant:</label>
+        <select id="pollutantSelect">
+            <option value="pm25">PM 2.5</option>
+            <option value="pm10">PM 10</option>
+            <option value="o3">Ozone (O3)</option>
+            <option value="no2">Nitrogen Dioxide (NO2)</option>
+            <option value="so2">Sulfur Dioxide (SO2)</option>
+            <option value="co">Carbon Monoxide (CO)</option>
+        </select>
+    </div>
 
-        <div id="vis"></div>
-        <script>
-            // Define the Vega-Lite specification
-            const vegaLiteSpec = {
-                "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-                "width": 1200, 
-                "height": 400,
-                "data": {
-                    "url": "https://raw.githubusercontent.com/emilyjwc/is445_group2/main/beijing-air-quality-new.csv",
-                    "format": {
-                        "type": "csv",
-                        "parse": {
-                            "date": "date",
-                            "pm25": "number",
-                            "pm10": "number",
-                            "o3": "number",
-                            "no2": "number",
-                            "so2": "number",
-                            "co": "number"
-                        }
-                    }
-                },
-                "mark": "line",
-                "encoding": {
-                    "x": { "field": "date", "type": "temporal" },
-                    "y": { "field": "pm25", "type": "quantitative" }
-                }
-            };
-
-            // Embed the visualization in the div with id 'vis'
-            const embedOpt = { "mode": "vega-lite" };
-            const el = document.getElementById('vis');
-            vegaEmbed(el, vegaLiteSpec, embedOpt);
-
-            // Handle dropdown selection change
-            const select = document.getElementById('pollutantSelect');
-            select.addEventListener('change', (event) => {
-                const selectedPollutant = event.target.value;
-                vegaLiteSpec.encoding.y.field = selectedPollutant;
-                vegaEmbed(el, vegaLiteSpec, embedOpt);
-            });
-        </script>
-
-        <button onclick="plotChart()">Refresh Data</button>
-        <div id="chartContainer"></div>
-        <p><h2 style="font-size: 20px;">Pollutant Levels (Press the refresh button for real-time data)</h2><br /></p>
+    <div id="vegaChart"></div>
+    <button onclick="plotChart()">Refresh Data</button>
+    <div id="chartContainer"></div>
+    
+    <p><h2 style="font-size: 20px;">Pollutant Levels (Press the refresh button for real-time data)</h2><br /></p>
         <script>
             const beijingApiUrl = "https://api.waqi.info/feed/beijing/?token=f4edd4abb0847e9970cbb651a257aeef2abf68ef";
 
@@ -172,9 +130,10 @@
             }
         </script>
 
-        <p><h2 style="font-size: 20px;">Map API</h2><br /></p>
-        <div id="map" style="height: 500px;"></div>
-        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <h2 style="font-size: 20px;">Map API</h2><br />
+    <div id="map" style="height: 500px;"></div>
+    
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
             // Define the API URL
             var beijingApiUrl1 = "https://api.waqi.info/feed/beijing/?token=f4edd4abb0847e9970cbb651a257aeef2abf68ef";
@@ -199,117 +158,119 @@
                 })
                 .catch(error => console.error('Error fetching data:', error));
         </script>
-        
-        <p><h2 style="font-size: 20px;">Widget API</h2><br /></p>
-        <div id="aqiWidget" style="background-color: #ffde33; padding: 10px; border-radius: 5px;"></div>
-        <script>
-            function displayAqiWidget(cityname, aqi, date, impact, attribution, details) {
-                var widgetElement = document.getElementById('aqiWidget');
-                var htmlCode = `
-                    <strong>${cityname} Air Quality</strong> is <span style='font-weight: bold;'>${impact}</span>.
-                    <br>
-                    AQI: ${aqi} on ${date}
-                    <br>
-                    Provided by ${attribution}
-                    <br>
-                    Details: ${details}
-                `;
-                widgetElement.innerHTML = htmlCode;
-            }
 
-            // Example data
-            var cityname = "Beijing";
-            var aqi = 38;
-            var date = "Sunday 7:00";
-            var impact = "Good";
-            var attribution = "Beijing Environmental Protection Monitoring Center";
-            var details = "Beijing Air Quality.\n38\nGood\nUpdated on Sunday 7:00";
+    <h2 style="font-size: 20px;">Widget API</h2><br />
+    <div id="aqiWidget" style="background-color: #ffde33; padding: 10px; border-radius: 5px;"></div>
+    
+    <script>
+        function displayAqiWidget(cityname, aqi, date, impact, attribution, details) {
+            var widgetElement = document.getElementById('aqiWidget');
+            var htmlCode = `
+                <strong>${cityname} Air Quality</strong> is <span style='font-weight: bold;'>${impact}</span>.
+                <br>
+                AQI: ${aqi} on ${date}
+                <br>
+                Provided by ${attribution}
+                <br>
+                Details: ${details}
+            `;
+            widgetElement.innerHTML = htmlCode;
+        }
 
-            // Display the widget
-            displayAqiWidget(cityname, aqi, date, impact, attribution, details);
-        </script>
+        // Example data
+        var cityname = "Beijing";
+        var aqi = 38;
+        var date = "Sunday 7:00";
+        var impact = "Good";
+        var attribution = "Beijing Environmental Protection Monitoring Center";
+        var details = "Beijing Air Quality.\n38\nGood\nUpdated on Sunday 7:00";
 
+        // Display the widget
+        displayAqiWidget(cityname, aqi, date, impact, attribution, details);
+    </script>
 
-        <h2 style="font-size: 20px;">Box Plots for Air Quality Parameters (Outliers)</h2>
+    <h2 style="font-size: 20px;">Box Plots for Air Quality Parameters (Outliers)</h2>
+    <div id="boxPlotVis">
+        <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/outlier.png" alt="outlier">
+    </div>
+
+    <h2 style="font-size: 20px;">Air Quality Trends with Outlier Detection</h2>
                     
-        <div id="vis">
-            <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/outlier.png" alt=outlier">
-        </div>
+    <div id="vis">
+        <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/outlier_trend.png" alt=outlier_trend">
+    </div>
 
-        <h2 style="font-size: 20px;">Air Quality Trends with Outlier Detection</h2>
-                    
-        <div id="vis">
-            <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/outlier_trend.png" alt=outlier_trend">
-        </div>
-
-        <h2 style="font-size: 20px;">Air Quality Trend</h2>
-            
-        <div id="vis">
-            <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/AQ_trend.png" alt="AQ_trend">
-        </div>
-
-        <h2 style="font-size: 20px;">PM2.5 and PM10 Trends Over Time (2022 and 2023)</h2>
-            
-        <div id="vis">
-            <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/2022 trend.png" alt=2022_trend">
-            <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/2023 trend.png" alt="2023_trend">
-        </div>
-
-        <h2 style="font-size: 20px;">Correlation Heatmap of Air Quality Parameters</h2>
-            
-        <div id="vis">
-            <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/heatmap.png" alt=heatmap">
-        </div>
-
-        <h2 style="font-size: 20px;">Time Series and Comparison of PM2.5 Levels with Extremes</h2>
-            
-        <div id="vis">
-            <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/extreme.png" alt=extreme">
-            <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/extreme comparison.png" alt=extreme_comparison">
-        </div>
-
-        <h2 style="font-size: 20px;">Seasonal Patterns of Air Quality</h2>
-            
-        <div id="vis">
-            <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/seasonal pattern.png" alt=seasonal_pattern">
-        </div>
-
-        <h2 style="font-size: 20px;">Yearly Patterns of Pollutants</h2>
-            
-        <div id="vis">
-            <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/yearly pattern.png" alt=yearly_pattern">
-        </div>
-
-        <h2 style="font-size: 20px;">Average Levels of Pollutants between Weekdays and Weekends</h2>
-            
-        <div id="vis">
-            <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/ave week.png" alt=ave_week">
-        </div>
-
-        <h2 style="font-size: 20px;">Overall Average Pollutant Levels</h2>
-            
-        <div id="vis">
-            <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/overall ave.png" alt=overall_ave">
-        </div>
-
-        <h2 style="font-size: 20px;">Distribution Histograms of Air Quality Parameters</h2>
-            
-        <div id="vis">
-            <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/distribution histogram.png" alt=distribution_hist">
-        </div>
-
-        <h2 style="font-size: 20px;">Violin Plots for Air Quality Parameters</h2>
-            
-        <div id="vis">
-            <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/violin plot.png" alt=violin_plot">
-        </div>
-
-        <h2 style="font-size: 20px;">Pairwise Relationships of Air Quality Parameters</h2>
-            
-        <div id="vis">
-            <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/pair plot.png" alt=pair_plot">
-        </div>
-
-
-
+    <h2 style="font-size: 20px;">Air Quality Trend</h2>
         
+    <div id="vis">
+        <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/AQ_trend.png" alt="AQ_trend">
+    </div>
+
+    <h2 style="font-size: 20px;">PM2.5 and PM10 Trends Over Time (2022 and 2023)</h2>
+        
+    <div id="vis">
+        <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/2022 trend.png" alt=2022_trend">
+        <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/2023 trend.png" alt="2023_trend">
+    </div>
+
+    <h2 style="font-size: 20px;">Correlation Heatmap of Air Quality Parameters</h2>
+        
+    <div id="vis">
+        <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/heatmap.png" alt=heatmap">
+    </div>
+
+    <h2 style="font-size: 20px;">Time Series and Comparison of PM2.5 Levels with Extremes</h2>
+        
+    <div id="vis">
+        <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/extreme.png" alt=extreme">
+        <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/extreme comparison.png" alt=extreme_comparison">
+    </div>
+
+    <h2 style="font-size: 20px;">Seasonal Patterns of Air Quality</h2>
+        
+    <div id="vis">
+        <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/seasonal pattern.png" alt=seasonal_pattern">
+    </div>
+
+    <h2 style="font-size: 20px;">Yearly Patterns of Pollutants</h2>
+        
+    <div id="vis">
+        <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/yearly pattern.png" alt=yearly_pattern">
+    </div>
+
+    <h2 style="font-size: 20px;">Average Levels of Pollutants between Weekdays and Weekends</h2>
+        
+    <div id="vis">
+        <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/ave week.png" alt=ave_week">
+    </div>
+
+    <h2 style="font-size: 20px;">Overall Average Pollutant Levels</h2>
+        
+    <div id="vis">
+        <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/overall ave.png" alt=overall_ave">
+    </div>
+
+    <h2 style="font-size: 20px;">Distribution Histograms of Air Quality Parameters</h2>
+        
+    <div id="vis">
+        <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/distribution histogram.png" alt=distribution_hist">
+    </div>
+
+    <h2 style="font-size: 20px;">Violin Plots for Air Quality Parameters</h2>
+        
+    <div id="vis">
+        <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/violin plot.png" alt=violin_plot">
+    </div>
+
+    <h2 style="font-size: 20px;">Pairwise Relationships of Air Quality Parameters</h2>
+        
+    <div id="vis">
+        <img src="https://raw.githubusercontent.com/emilyjwc/is445_group2/main/images/pair plot.png" alt=pair_plot">
+    </div>
+</body>
+
+<script>
+    // ... (unchanged) ...
+</script>
+
+</html>
