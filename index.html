@@ -37,6 +37,7 @@
             </p>
 
         </p>
+        <h2 style="font-size: 20px;">Time trend of Pollutant Selected by year</h2><br />
         <div>
             <label for="pollutantSelect">Select Pollutant:</label>
             <select id="pollutantSelect">
@@ -91,7 +92,7 @@
             });
         </script>
 
-
+        <h2 style="font-size: 20px;">Pollutant Levels (Press the refresh button for real-time data)</h2><br />
         <div id="chartContainer"></div>
         <button onclick="plotChart()">Refresh Data</button>
         <script>
@@ -169,7 +170,7 @@
             }
         </script>
 
-
+        <h2 style="font-size: 20px;">Map API</h2><br />
         <div id="map" style="height: 500px;"></div>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
@@ -197,7 +198,7 @@
                 .catch(error => console.error('Error fetching data:', error));
         </script>
         
-
+        <h2 style="font-size: 20px;">Widget API</h2><br />
         <div id="aqiWidget" style="background-color: #ffde33; padding: 10px; border-radius: 5px;"></div>
         <script>
             function displayAqiWidget(cityname, aqi, date, impact, attribution, details) {
@@ -228,73 +229,73 @@
 
 
         <canvas id="pollutantsTrendsChart" width="800" height="400"></canvas>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // Replace 'your_api_url_here' with the actual API endpoint
-    const apiUrl = 'your_api_url_here';
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Replace 'your_api_url_here' with the actual API endpoint
+            const apiUrl = 'your_api_url_here';
 
-    // Fetch data from the API
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            // Extract relevant data
-            const dates = data.map(entry => entry.date);
-            const pollutants = ['pm25', 'pm10', 'o3', 'no2', 'so2', 'co'];
+            // Fetch data from the API
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // Extract relevant data
+                    const dates = data.map(entry => entry.date);
+                    const pollutants = ['pm25', 'pm10', 'o3', 'no2', 'so2', 'co'];
 
-            // Create datasets for each pollutant
-            const datasets = pollutants.map(pollutant => {
-                return {
-                    label: pollutant,
-                    data: data.map(entry => entry[pollutant]),
-                    borderColor: getRandomColor(),
-                    fill: false
-                };
-            });
+                    // Create datasets for each pollutant
+                    const datasets = pollutants.map(pollutant => {
+                        return {
+                            label: pollutant,
+                            data: data.map(entry => entry[pollutant]),
+                            borderColor: getRandomColor(),
+                            fill: false
+                        };
+                    });
 
-            // Create a line chart
-            const ctx = document.getElementById('pollutantsTrendsChart').getContext('2d');
-            const pollutantsTrendsChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: dates,
-                    datasets: datasets
-                },
-                options: {
-                    scales: {
-                        x: {
-                            type: 'time',
-                            time: {
-                                unit: 'day',
-                                displayFormats: {
-                                    day: 'MMM D'
-                                }
-                            }
+                    // Create a line chart
+                    const ctx = document.getElementById('pollutantsTrendsChart').getContext('2d');
+                    const pollutantsTrendsChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: dates,
+                            datasets: datasets
                         },
-                        y: {
+                        options: {
+                            scales: {
+                                x: {
+                                    type: 'time',
+                                    time: {
+                                        unit: 'day',
+                                        displayFormats: {
+                                            day: 'MMM D'
+                                        }
+                                    }
+                                },
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: 'Pollution Level'
+                                    }
+                                }
+                            },
                             title: {
                                 display: true,
-                                text: 'Pollution Level'
+                                text: 'Time Series Trends of Air Quality Parameters'
                             }
                         }
-                    },
-                    title: {
-                        display: true,
-                        text: 'Time Series Trends of Air Quality Parameters'
-                    }
-                }
-            });
+                    });
 
-            function getRandomColor() {
-                var letters = '0123456789ABCDEF';
-                var color = '#';
-                for (var i = 0; i < 6; i++) {
-                    color += letters[Math.floor(Math.random() * 16)];
-                }
-                return color;
-            }
-        })
-        .catch(error => console.error('Error fetching data:', error));
-</script>
+                    function getRandomColor() {
+                        var letters = '0123456789ABCDEF';
+                        var color = '#';
+                        for (var i = 0; i < 6; i++) {
+                            color += letters[Math.floor(Math.random() * 16)];
+                        }
+                        return color;
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        </script>
 
 
         
