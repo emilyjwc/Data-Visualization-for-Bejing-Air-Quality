@@ -98,7 +98,7 @@
                 vegaEmbed(el, vegaLiteSpec, embedOpt);
             });
         </script><br/>
-        <p>
+
         <h2 style="font-size: 20px;">Pollutant Levels (Press the refresh button for real-time data)</h2><br/>
 
         <div id="chartContainer">
@@ -106,90 +106,82 @@
         </div>
 
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                console.log("DOM is fully loaded");
-                
-                const beijingApiUrl = "https://api.waqi.info/feed/beijing/?token=f4edd4abb0847e9970cbb651a257aeef2abf68ef";
-        
-                async function fetchData(apiUrl) {
-                    const response = await fetch(apiUrl);
-                    const data = await response.json();
-                    return data;
-                }
-        
-                async function updateChart() {
-                    const data = await fetchData(beijingApiUrl);
-        
-                    console.log("Data fetched:", data);
-        
-                    // Extract relevant data
-                    const timeSeries = new Date(data.data.time.s);
-                    const pollutants = data.data.iaqi;
-                    const timeZone = data.data.time.tz;
-        
-                    // Select pollutants
-                    const selectedPollutants = ["pm25", "pm10", "no2", "co", "so2", "o3"];
-                    const concentrations = selectedPollutants.map(pollutant => pollutants[pollutant]?.v || 0);
-        
-                    // Get the last refresh time
-                    const lastRefreshTime = new Date().toLocaleString();
-        
-                    return {
-                        concentrations,
-                        timeSeries,
-                        lastRefreshTime,
-                        timeZone
+            // Move the script tag outside of the chartContainer div
+            const beijingApiUrl = "https://api.waqi.info/feed/beijing/?token=f4edd4abb0847e9970cbb651a257aeef2abf68ef";
+
+            async function fetchData(apiUrl) {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                return data;
+            }
+
+            async function updateChart() {
+                const data = await fetchData(beijingApiUrl);
+
+                // Extract relevant data
+                const timeSeries = new Date(data.data.time.s);
+                const pollutants = data.data.iaqi;
+                const timeZone = data.data.time.tz;
+
+                // Select pollutants
+                const selectedPollutants = ["pm25", "pm10", "no2", "co", "so2", "o3"];
+                const concentrations = selectedPollutants.map(pollutant => pollutants[pollutant]?.v || 0);
+
+                // Get the last refresh time
+                const lastRefreshTime = new Date().toLocaleString();
+
+                return {
+                    concentrations,
+                    timeSeries,
+                    lastRefreshTime,
+                    timeZone
+                };
+            }
+
+            function plotChart() {
+                updateChart().then(data => {
+                    const chartContainer = document.getElementById("chartContainer");
+                    chartContainer.innerHTML = ""; // Clear previous chart
+
+                    const chartTitle = `Pollutant Levels in Beijing on ${data.timeSeries} (${data.timeZone}) (Last Refresh: ${data.lastRefreshTime})`;
+
+                    const chart = document.createElement("div");
+                    chart.innerHTML = `<h2>${chartTitle}</h2>`;
+                    chartContainer.appendChild(chart);
+
+                    const chartCanvas = document.createElement("canvas");
+                    chartCanvas.width = 100;
+                    chartCanvas.height = 50;
+                    chartContainer.appendChild(chartCanvas);
+
+                    const ctx = chartCanvas.getContext("2d");
+                    const labels = ["pm25", "pm10", "no2", "co", "so2", "o3"];
+
+                    const chartData = {
+                        labels: labels,
+                        datasets: [{
+                            label: "Concentration (µg/m³)",
+                            data: data.concentrations,
+                            backgroundColor: ["red", "blue", "green", "purple", "orange", "gray"]
+                        }]
                     };
-                }
-        
-                function plotChart() {
-                    console.log("Plotting chart");
-                    updateChart().then(data => {
-                        const chartContainer = document.getElementById("chartContainer");
-                        chartContainer.innerHTML = ""; // Clear previous chart
-        
-                        const chartTitle = `Pollutant Levels in Beijing on ${data.timeSeries} (${data.timeZone}) (Last Refresh: ${data.lastRefreshTime})`;
-        
-                        const chart = document.createElement("div");
-                        chart.innerHTML = `<h2>${chartTitle}</h2>`;
-                        chartContainer.appendChild(chart);
-        
-                        const chartCanvas = document.createElement("canvas");
-                        chartCanvas.width = 100;
-                        chartCanvas.height = 50;
-                        chartContainer.appendChild(chartCanvas);
-        
-                        const ctx = chartCanvas.getContext("2d");
-                        const labels = ["pm25", "pm10", "no2", "co", "so2", "o3"];
-        
-                        const chartData = {
-                            labels: labels,
-                            datasets: [{
-                                label: "Concentration (µg/m³)",
-                                data: data.concentrations,
-                                backgroundColor: ["red", "blue", "green", "purple", "orange", "gray"]
-                            }]
-                        };
-        
-                        new Chart(ctx, {
-                            type: 'bar',
-                            data: chartData,
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
+
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: chartData,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
                                 }
                             }
-                        });
+                        }
                     });
-                }
-        
-                plotChart();  // Initial plot when the page is loaded
-            });
+                });
+            }
         </script>
-        </p>
-        
+
+
         <p><h2 style="font-size: 20px;">Map API</h2><br /></p>
         <div id="map" style="height: 500px;"></div>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
