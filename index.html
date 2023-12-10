@@ -72,37 +72,24 @@
                 },
                 "mark": "line",
                 "encoding": {
-                    "x": {"field": "date", "type": "temporal"},
-                    "y": {
-                        "aggregate": "average",
-                        "field": "pm25",
-                        "type": "quantitative"
-                    }
-                },
-                "transform": [
-                    {
-                        "aggregate": [{"op": "average", "field": "pm25", "as": "average_pm25"}],
-                        "groupby": [{"timeUnit": "year", "field": "date"}]
-                    }
-                ]
+                    "x": { "field": "date", "type": "temporal" },
+                    "y": { "field": "pm25", "type": "quantitative" }
+                }
             };
-        
+
             // Embed the visualization in the div with id 'vis'
-            const embedOpt = {"mode": "vega-lite"};
+            const embedOpt = { "mode": "vega-lite" };
             const el = document.getElementById('vis');
             vegaEmbed(el, vegaLiteSpec, embedOpt);
-        
+
             // Handle dropdown selection change
             const select = document.getElementById('pollutantSelect');
             select.addEventListener('change', (event) => {
                 const selectedPollutant = event.target.value;
                 vegaLiteSpec.encoding.y.field = selectedPollutant;
-                vegaLiteSpec.transform[0].aggregate[0].field = selectedPollutant; // Update aggregate field
                 vegaEmbed(el, vegaLiteSpec, embedOpt);
             });
         </script>
-        
-        
 
 
         <div id="chartContainer"></div>
