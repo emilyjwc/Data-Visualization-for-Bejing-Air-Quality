@@ -38,7 +38,7 @@
 
         </p>
         <div>
-            <label for="pollutantSelect">Select Pollutant:</label>
+            <label for="pollutantSelect">Select Pollution:</label>
             <select id="pollutantSelect">
                 <option value="pm25">PM 2.5</option>
                 <option value="pm10">PM 10</option>
@@ -48,9 +48,9 @@
                 <option value="co">Carbon Monoxide (CO)</option>
             </select>
         </div>
-
-
+    
         <div id="vis"></div>
+    
         <script>
             // Define the Vega-Lite specification
             const vegaLiteSpec = {
@@ -76,12 +76,12 @@
                     "y": { "field": "pm25", "type": "quantitative" }
                 }
             };
-
+    
             // Embed the visualization in the div with id 'vis'
             const embedOpt = { "mode": "vega-lite" };
             const el = document.getElementById('vis');
             vegaEmbed(el, vegaLiteSpec, embedOpt);
-
+    
             // Handle dropdown selection change
             const select = document.getElementById('pollutantSelect');
             select.addEventListener('change', (event) => {
@@ -90,7 +90,6 @@
                 vegaEmbed(el, vegaLiteSpec, embedOpt);
             });
         </script>
-
 
         <div id="chartContainer"></div>
         <button onclick="plotChart()">Refresh Data</button>
