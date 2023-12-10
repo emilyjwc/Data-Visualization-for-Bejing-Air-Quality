@@ -188,23 +188,28 @@
     
             // Fetch data from the API
             fetch(beijingApiUrl1)
-                .then(response => response.json())
-                .then(data => {
-                    // Extract relevant information
-                    var latitude = data.data.city.geo[0];
-                    var longitude = data.data.city.geo[1];
-                    var aqiMarker = 'usepa-aqi';
-    
-                    // Create a map centered around Beijing
-                    var map = L.map('map').setView([latitude, longitude], 10);
-    
-                    // Add the tile layer
-                    var tileUrl = `https://tiles.aqicn.org/tiles/${aqiMarker}/{z}/{x}/{y}.png`;
-                    L.tileLayer(tileUrl, {
-                        attribution: 'Air Quality Index'
-                    }).addTo(map);
-                })
-                .catch(error => console.error('Error fetching data:', error));
+            .then(response => response.json())
+            .then(data => {
+                var latitude = data.data.city.geo[0];
+                var longitude = data.data.city.geo[1];
+                var aqiMarker = 'usepa-aqi';
+
+                // Create a map centered around Beijing
+                var map = L.map('map').setView([latitude, longitude], 10);
+
+                // Add the base tile layer
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: 'OpenStreetMap'
+                }).addTo(map);
+
+                // Add the air quality tile layer
+                var tileUrl = `https://tiles.aqicn.org/tiles/${aqiMarker}/{z}/{x}/{y}.png`;
+                var aqiLayer = L.tileLayer(tileUrl, {
+                    attribution: 'Air Quality Index'
+                }).addTo(map);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+
         </script>
 
         <p><h2 style="font-size: 20px;">Widget API</h2><br /></p>
