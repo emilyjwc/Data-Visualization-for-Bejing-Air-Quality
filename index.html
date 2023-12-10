@@ -99,8 +99,8 @@
             });
         </script><br/>
 
-        <p><h2 style="font-size: 20px;">Pollutant Levels (Press the refresh button for real-time data)</h2><br /></p>
-        <div id="chartContainer"></div>
+        <div id="chartContainer">
+            <h2 style="font-size: 20px;">Pollutant Levels (Press the refresh button for real-time data)</h2><br/>
         <button onclick="plotChart()">Refresh Data</button>
         <script>
             const beijingApiUrl = "https://api.waqi.info/feed/beijing/?token=f4edd4abb0847e9970cbb651a257aeef2abf68ef";
@@ -176,6 +176,7 @@
                 });
             }
         </script>
+        </div>
 
         <p><h2 style="font-size: 20px;">Map API</h2><br /></p>
         <div id="map" style="height: 500px;"></div>
